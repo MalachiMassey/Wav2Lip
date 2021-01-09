@@ -49,6 +49,8 @@ parser.add_argument('--rotate', default=False, action='store_true',
 
 parser.add_argument('--nosmooth', default=False, action='store_true',
 					help='Prevent smoothing face detections over a short temporal window')
+parser.addargument('--ignorefaceless', default=False, action='store_true', help='Ignore faceless frames.')
+
 
 args = parser.parse_args()
 args.img_size = 96
@@ -88,13 +90,17 @@ def face_detect(images):
 	pady1, pady2, padx1, padx2 = args.pads
 	for rect, image in zip(predictions, images):
 		if rect is None:
-			cv2.imwrite('temp/faulty_frame.jpg', image) # check this frame where the face was not detected.
-			raise ValueError('Face not detected! Ensure the video contains a face in all the frames.')
-
-		y1 = max(0, rect[1] - pady1)
-		y2 = min(image.shape[0], rect[3] + pady2)
-		x1 = max(0, rect[0] - padx1)
-		x2 = min(image.shape[1], rect[2] + padx2)
+			y1 = max(0, 0)
+			y2 = min(0, 0)
+			x1 = max(0, 0)
+			x2 = min(0, 0)
+			#cv2.imwrite('temp/faulty_frame.jpg', image) # check this frame where the face was not detected.
+			#raise ValueError('Face not detected! Ensure the video contains a face in all the frames.')
+		else:			
+			y1 = max(0, rect[1] - pady1)
+			y2 = min(image.shape[0], rect[3] + pady2)
+			x1 = max(0, rect[0] - padx1)
+			x2 = min(image.shape[1], rect[2] + padx2)
 		
 		results.append([x1, y1, x2, y2])
 
