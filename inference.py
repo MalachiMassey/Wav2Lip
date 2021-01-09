@@ -130,7 +130,7 @@ def datagen(frames, mels):
 		frame_to_save = frames[idx].copy()
 		face, coords = face_det_results[idx].copy()
 		
-		if (coords not (0,0,0,0)):
+		if (coords != (0,0,0,0)):
 			face = cv2.resize(face, (args.img_size, args.img_size))
 			
 		img_batch.append(face)
