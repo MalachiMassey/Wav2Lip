@@ -129,8 +129,9 @@ def datagen(frames, mels):
 		idx = 0 if args.static else i%len(frames)
 		frame_to_save = frames[idx].copy()
 		face, coords = face_det_results[idx].copy()
-
-		face = cv2.resize(face, (args.img_size, args.img_size))
+		
+		if (not args.ignorfaceless):
+			face = cv2.resize(face, (args.img_size, args.img_size))
 			
 		img_batch.append(face)
 		mel_batch.append(m)
